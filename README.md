@@ -84,4 +84,6 @@ The project uses `Beanie` ODM for MongoDB. The database stores:
 - `incomplete_students`: Tracks rows that were missing required data.
 - `certificates`: Stores the final URLs of the generated PDFs.
 
-Generated PDFs are saved in `public/certificates/` and served statically.
+Generated PDFs are currently saved in `public/certificates/` and served statically via FastAPI for local development and testing. 
+
+> **Note on Production Storage:** In a true production environment, the generated PDFs will be uploaded directly to **AWS S3** (or a similar cloud storage provider), and the `certificate_link` stored in the database will be the public S3 URL. This ensures scalability, durability, and allows the frontend to seamlessly access the certificates regardless of where the backend containers are hosted.
