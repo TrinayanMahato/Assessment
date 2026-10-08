@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from typing import Any, Dict, List, Optional
 
 import openpyxl
-from beanie import init_beanie
+from beanie import PydanticObjectId, init_beanie
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.staticfiles import StaticFiles
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -190,3 +190,30 @@ async def get_pending_students(
         "limit": limit,
         "students": pending_students
     }
+
+
+@app.get("/certificates")
+async def get_certificates(
+    skip: int = Query(0, ge=0, description="Number of records to skip"),
+    limit: int = Query(100, ge=1, le=1000, description="Maximum number of records to return")
+):
+    """Retrieve all certificates with pagination."""
+    total_certificates = await Certificate.find_all().count()
+    certificates = await Certificate.find_all().skip(skip).limit(limit).to_list()
+    
+    return {
+        "total_count": total_certificates,
+        "returned_count": len(certificates),
+        "skip": skip,
+        "limit": limit,
+        "certificates": certificates
+    }
+
+
+@app.get("/certificates/{student_id}")
+async def get_certificate_by_student(student_id: PydanticObjectId):
+    """Retrieve the certificate for a specific student."""
+    certificate = await Certificate.find_one(Certificate.student_id == student_id)
+    if not certificate:
+        raise HTTPException(status_code=404, detail="Certificate not found for this student")
+    return certificate

@@ -41,3 +41,6 @@ class Certificate(Document):
 
     class Settings:
         name = "certificates"
+        indexes = [
+            "student_id",
+        ]
