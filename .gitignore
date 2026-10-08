@@ -4,3 +4,4 @@ __pycache__/
 *.db
 certificates/
 uploads/
+test_students.csv
