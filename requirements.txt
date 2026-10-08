@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+openpyxl
+pytest
+httpx
+celery
+redis
+beanie
+motor
+pymongo
+python-dotenv
+pillow
+resend
